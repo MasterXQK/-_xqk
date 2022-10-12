@@ -6,7 +6,6 @@ package a_baseAlogorithm.ad_binarySearch;
  */
 public class binarySearch {
 
-
     // 1.二分查找 找最左侧的 >= target的最小值.如 arr = {0, 1, 1, 1, 2} binarySearchLeft(a, 1) = 1
     // 2.如果要用此方法判断target是否存在于数组，可以用 arr[binarySearchLeft(arr, target)] == target 来判断 为true则存在
     static int binarySearchLeft(int[] arr, int target) {

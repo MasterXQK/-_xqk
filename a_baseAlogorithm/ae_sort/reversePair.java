@@ -15,6 +15,7 @@ public class reversePair {
         Solution mergeSolution = new Solution();
         // 线段树求逆序对
         Solution1 segmentSolution = new Solution1();
+        // TODO 树状数组
     }
 
 

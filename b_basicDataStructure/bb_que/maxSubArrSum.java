@@ -97,4 +97,35 @@ public class maxSubArrSum {
         }
         return minLen == Integer.MAX_VALUE ? -1 : minLen;
     }
+
+    // 918. 环形子数组的最大和
+    // https://leetcode.cn/problems/maximum-sum-circular-subarray/description/
+    public int maxSubarraySumCircular(int[] nums) {
+        // 前缀和 + 单调队列
+        int n = nums.length;
+        int[] arr = new int[n * 2];
+        for (int i = 0; i < n; i++) {
+            arr[i] = nums[i];
+            arr[i + n] = nums[i];
+        }
+
+        long curSum = 0L;
+        long max = nums[0];
+        ArrayDeque<Pair<Integer, Long>> stack = new ArrayDeque<>();
+        stack.add(new Pair(-1, 0L));
+        for (int i = 0; i < 2 * n; i++) {
+            curSum += arr[i];
+            while (!stack.isEmpty() && i - stack.peekFirst().getKey() > n) {
+                stack.pollFirst();
+            }
+
+            max = Math.max(max, curSum - stack.peekFirst().getValue());
+            // 这里容易把栈清空， 因此max在这之前赋值
+            while (!stack.isEmpty() && curSum <= stack.peekLast().getValue()) {
+                stack.pollLast();
+            }
+            stack.add(new Pair(i, curSum));
+        }
+        return (int) max;
+    }
 }

@@ -47,29 +47,28 @@ public class maxSubArrSum {
     // 滑动窗口最大值
     // https://leetcode.cn/problems/sliding-window-maximum/
     public int[] maxSlidingWindow(int[] nums, int k) {
-        // 头部大 尾部小的单调栈
         ArrayDeque<Integer> stack = new ArrayDeque<>();
         int n = nums.length;
-        // 初始化前k个
+        int[] res = new int[n - k + 1];
         for (int i = 0; i < k; i++) {
-            while (!stack.isEmpty() && nums[stack.peekLast()] < nums[i]) {
+            while (!stack.isEmpty() && nums[stack.peekLast()] <= nums[i]) {
                 stack.pollLast();
             }
             stack.addLast(i);
         }
-        int[] res = new int[n - k + 1];
+
         for (int i = k; i < n; i++) {
             res[i - k] = nums[stack.peekFirst()];
-            while (!stack.isEmpty() && nums[stack.peekLast()] < nums[i]) {
+            while (!stack.isEmpty() && i - stack.peekFirst() >= k) {
+                stack.pollFirst();
+            }
+            while (!stack.isEmpty() && nums[stack.peekLast()] <= nums[i]) {
                 stack.pollLast();
             }
             stack.addLast(i);
-            // 距离大于k的就舍弃
-            while (!stack.isEmpty() && i - stack.peekFirst() + 1 > k) {
-                stack.pollFirst();
-            }
         }
         res[n - k] = nums[stack.peekFirst()];
         return res;
+
     }
 }

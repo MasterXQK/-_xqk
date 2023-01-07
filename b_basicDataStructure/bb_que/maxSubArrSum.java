@@ -1,6 +1,7 @@
 package b_basicDataStructure.bb_que;
 
 import CodeForce.Main;
+import javafx.util.Pair;
 
 import java.io.PrintWriter;
 import java.util.ArrayDeque;
@@ -70,5 +71,30 @@ public class maxSubArrSum {
         res[n - k] = nums[stack.peekFirst()];
         return res;
 
+    }
+
+
+    // 862. 和至少为 K 的最短子数组
+    // 前缀和 + 单调队列
+    // https://leetcode.cn/problems/shortest-subarray-with-sum-at-least-k/description/
+    // https://leetcode.cn/problems/shortest-subarray-with-sum-at-least-k/solutions/1925036/liang-zhang-tu-miao-dong-dan-diao-dui-li-9fvh/
+    public int shortestSubarray(int[] nums, int k) {
+        // sum[left, right) == sum[right] - sum[left]
+        long curSum = 0L;
+        int n = nums.length;
+        int minLen = Integer.MAX_VALUE;
+        ArrayDeque<Pair<Integer, Long>> stack = new ArrayDeque<>();
+        stack.add(new Pair(-1, 0L));
+        for (int i = 0; i < n; i++) {
+            curSum += nums[i];
+            while (!stack.isEmpty() && curSum - stack.peekFirst().getValue() >= k) {
+                minLen = Math.min(minLen, i - stack.pollFirst().getKey());
+            }
+            while (!stack.isEmpty() && stack.peekLast().getValue() >= curSum) {
+                stack.pollLast();
+            }
+            stack.add(new Pair(i, curSum));
+        }
+        return minLen == Integer.MAX_VALUE ? -1 : minLen;
     }
 }
